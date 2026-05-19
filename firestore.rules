@@ -1,0 +1,173 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Auth & Admin Primitives
+    function isSignedIn() { return request.auth != null; }
+    function isAdmin() { 
+      return isSignedIn() && exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid)); 
+    }
+    
+    // Bootstrapped Admin: Your email from AI Studio or a manually added admin.
+    // For this preview, if user is not an admin, they can't write standard content.
+    // However, users can CREATE orders without being signed in (anonymous / contact info).
+    
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Validation Blueprints
+    function isValidCategory(data) {
+      return data.keys().hasAll(['name', 'createdAt', 'updatedAt'])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && (!('imageUrl' in data.keys()) || (data.imageUrl is string && data.imageUrl.size() <= 1024))
+        && data.createdAt is number
+        && data.updatedAt is number;
+    }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll(['categoryId', 'name', 'price', 'createdAt', 'updatedAt'])
+        && data.categoryId is string && data.categoryId.size() <= 128 && data.categoryId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && (!('description' in data.keys()) || (data.description is string && data.description.size() <= 1000))
+        && data.price is number && data.price >= 0
+        && (!('imageUrl' in data.keys()) || (data.imageUrl is string && data.imageUrl.size() <= 1024))
+        && (!('sizes' in data.keys()) || (data.sizes is list && data.sizes.size() <= 20))
+        && data.createdAt is number
+        && data.updatedAt is number;
+    }
+
+    function isValidDeal(data) {
+      return data.keys().hasAll(['title', 'price', 'createdAt', 'updatedAt'])
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+        && data.price is number && data.price >= 0
+        && (!('items' in data.keys()) || (data.items is list && data.items.size() <= 20))
+        && (!('imageUrl' in data.keys()) || (data.imageUrl is string && data.imageUrl.size() <= 1024))
+        && data.createdAt is number
+        && data.updatedAt is number;
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll(['customerName', 'phone', 'branchId', 'branchName', 'deliveryAddress', 'items', 'totalBill', 'status', 'createdAt', 'updatedAt'])
+        && data.customerName is string && data.customerName.size() > 0 && data.customerName.size() <= 100
+        && data.phone is string && data.phone.size() > 0 && data.phone.size() <= 50
+        && data.branchId is string && data.branchId.size() <= 128 && data.branchId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.branchName is string && data.branchName.size() > 0 && data.branchName.size() <= 100
+        && data.deliveryAddress is string && data.deliveryAddress.size() > 0 && data.deliveryAddress.size() <= 500
+        && (!('additionalNotes' in data.keys()) || (data.additionalNotes is string && data.additionalNotes.size() <= 1000))
+        && data.items is list && data.items.size() > 0 && data.items.size() <= 50
+        && data.totalBill is number && data.totalBill >= 0
+        && data.status is string && data.status in ['pending', 'preparing', 'dispatched', 'delivered']
+        && data.createdAt is number
+        && data.updatedAt is number;
+    }
+
+    function isValidBranch(data) {
+      return data.keys().hasAll(['name', 'location', 'numbers', 'createdAt', 'updatedAt'])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.location is string && data.location.size() > 0 && data.location.size() <= 500
+        && data.numbers is list && data.numbers.size() > 0 && data.numbers.size() <= 10
+        && data.createdAt is number
+        && data.updatedAt is number;
+    }
+
+    function isValidGallery(data) {
+      return data.keys().hasAll(['title', 'category', 'imageUrl', 'createdAt', 'updatedAt'])
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 100
+        && data.category is string && data.category in ['food', 'interior', 'pizza', 'burger', 'environment']
+        && data.imageUrl is string && data.imageUrl.size() <= 1024
+        && data.createdAt is number
+        && data.updatedAt is number;
+    }
+
+    function isValidAdminUser(data) {
+      return data.keys().hasAll(['email', 'role', 'createdAt', 'updatedAt'])
+        && data.email is string && data.email.size() > 0 && data.email.size() <= 200
+        && data.role == 'admin'
+        && data.createdAt is number
+        && data.updatedAt is number;
+    }
+
+    // Categories
+    match /categories/{categoryId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(categoryId) && isValidCategory(incoming()) && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidId(categoryId) && isValidCategory(incoming()) 
+                     && incoming().createdAt == existing().createdAt 
+                     && incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(categoryId);
+    }
+
+    // Products
+    match /products/{productId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(productId) && isValidProduct(incoming()) 
+                     && exists(/databases/$(database)/documents/categories/$(incoming().categoryId))
+                     && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidId(productId) && isValidProduct(incoming()) 
+                     && incoming().createdAt == existing().createdAt 
+                     && incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(productId);
+    }
+
+    // Deals
+    match /deals/{dealId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(dealId) && isValidDeal(incoming()) && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidId(dealId) && isValidDeal(incoming()) 
+                     && incoming().createdAt == existing().createdAt 
+                     && incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(dealId);
+    }
+
+    // Orders (Public can create, Admin can read/update)
+    match /orders/{orderId} {
+      allow create: if isValidId(orderId) && isValidOrder(incoming()) 
+                     && exists(/databases/$(database)/documents/branches/$(incoming().branchId))
+                     && incoming().createdAt == request.time
+                     && incoming().status == 'pending';
+      allow get, list: if isAdmin();
+      allow update: if isAdmin() && isValidId(orderId) && isValidOrder(incoming()) 
+                     && incoming().createdAt == existing().createdAt 
+                     && incoming().updatedAt == request.time;
+      allow delete: if false; // Orders should not be deleted, only status updated
+    }
+
+    // Branches
+    match /branches/{branchId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(branchId) && isValidBranch(incoming()) && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidId(branchId) && isValidBranch(incoming()) 
+                     && incoming().createdAt == existing().createdAt 
+                     && incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(branchId);
+    }
+
+    // Gallery
+    match /gallery/{imageId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(imageId) && isValidGallery(incoming()) && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidId(imageId) && isValidGallery(incoming()) 
+                     && incoming().createdAt == existing().createdAt 
+                     && incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(imageId);
+    }
+
+    // Admin Users
+    match /adminUsers/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId; // Allow users to check if they are admins
+      allow create: if isAdmin() && isValidId(userId) && isValidAdminUser(incoming()) && incoming().createdAt == request.time;
+      allow update: if isAdmin() && isValidId(userId) && isValidAdminUser(incoming()) 
+                     && incoming().createdAt == existing().createdAt 
+                     && incoming().updatedAt == request.time;
+      allow delete: if isAdmin() && isValidId(userId) && request.auth.uid != userId; // Block self-deletion
+      allow list: if false; // Hide the full list of admins even from other admins
+    }
+  }
+}

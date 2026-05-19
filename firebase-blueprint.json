@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "Category": {
+      "title": "Category",
+      "description": "Menu categories",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["name", "createdAt", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Food menu items",
+      "type": "object",
+      "properties": {
+        "categoryId": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "imageUrl": { "type": "string" },
+        "sizes": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "name": { "type": "string" }, "price": { "type": "number" } } }
+        },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["categoryId", "name", "price", "createdAt", "updatedAt"]
+    },
+    "Deal": {
+      "title": "Deal",
+      "description": "Combo deals",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "price": { "type": "number" },
+        "items": { "type": "array", "items": { "type": "string" } },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["title", "price", "createdAt", "updatedAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer orders",
+      "type": "object",
+      "properties": {
+        "customerName": { "type": "string" },
+        "phone": { "type": "string" },
+        "branchId": { "type": "string" },
+        "branchName": { "type": "string" },
+        "deliveryAddress": { "type": "string" },
+        "additionalNotes": { "type": "string" },
+        "items": { "type": "array" },
+        "totalBill": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "preparing", "dispatched", "delivered"] },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["customerName", "phone", "branchId", "branchName", "deliveryAddress", "items", "totalBill", "status", "createdAt", "updatedAt"]
+    },
+    "Branch": {
+      "title": "Branch",
+      "description": "Restaurant branches",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "location": { "type": "string" },
+        "numbers": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["name", "location", "numbers", "createdAt", "updatedAt"]
+    },
+    "Gallery": {
+      "title": "Gallery",
+      "description": "Gallery images",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["title", "category", "imageUrl", "createdAt", "updatedAt"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Admin accounts",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin"] },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["email", "role", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "categories": { "schema": { "$ref": "#/entities/Category" }, "description": "Categories collection" },
+    "products": { "schema": { "$ref": "#/entities/Product" }, "description": "Products collection" },
+    "deals": { "schema": { "$ref": "#/entities/Deal" }, "description": "Deals collection" },
+    "orders": { "schema": { "$ref": "#/entities/Order" }, "description": "Orders collection" },
+    "branches": { "schema": { "$ref": "#/entities/Branch" }, "description": "Branches collection" },
+    "gallery": { "schema": { "$ref": "#/entities/Gallery" }, "description": "Gallery collection" },
+    "adminUsers": { "schema": { "$ref": "#/entities/AdminUser" }, "description": "Admin Users collection" }
+  }
+}
