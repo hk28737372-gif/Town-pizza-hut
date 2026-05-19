@@ -28,9 +28,12 @@ export default function Deals() {
 
   return (
     <div className="bg-cream min-h-screen pb-20">
-      <div className="bg-accent text-primary py-16 text-center shadow-inner">
-        <h1 className="text-5xl font-serif font-bold mb-4">Combo Deals</h1>
-        <p className="opacity-90 max-w-xl font-medium mx-auto">Get the best value with our special combination deals perfect for families and hunger pangs.</p>
+      <div className="bg-accent text-white py-16 text-center shadow-inner">
+        <h1 className="text-5xl font-bold mb-4 flex justify-center gap-3">
+          <span className="font-logo-main tracking-wide">TOWN</span>
+          <span className="font-logo-sub text-primary">Deals</span>
+        </h1>
+        <p className="opacity-90 text-primary max-w-xl font-medium mx-auto">Get the best value with our special combination deals perfect for families and hunger pangs.</p>
       </div>
 
       <div className="container mx-auto px-4 py-16">
@@ -44,7 +47,10 @@ export default function Deals() {
                   {deal.imageUrl ? (
                     <img src={deal.imageUrl} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center font-serif text-gray-400">Deal Image</div>
+                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-300 border border-gray-200">
+                      <span className="font-logo-main text-2xl tracking-wide opacity-50">TOWN</span>
+                      <span className="font-logo-sub text-xl opacity-50 -mt-2">Pizza-Hut</span>
+                    </div>
                   )}
                   <div className="absolute top-4 right-4 bg-accent text-primary font-bold px-4 py-2 rounded-full shadow-lg transform rotate-3">
                     Rs. {deal.price}

@@ -15,7 +15,15 @@ export default function AdminDashboard() {
       if (u) {
         try {
           const docRef = doc(db, 'adminUsers', u.uid);
-          const docSnap = await getDoc(docRef);
+          let docSnap = await getDoc(docRef);
+          
+          // Auto-provision the specified owner email
+          if (!docSnap.exists() && u.email === 'hk28737372@gmail.com') {
+            const { setDoc } = await import('firebase/firestore');
+            await setDoc(docRef, { email: u.email, role: 'admin', createdAt: Date.now(), updatedAt: Date.now() });
+            docSnap = await getDoc(docRef);
+          }
+
           if (docSnap.exists() && docSnap.data().role === 'admin') {
             setIsAdmin(true);
             

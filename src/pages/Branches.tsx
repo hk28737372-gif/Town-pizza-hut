@@ -26,7 +26,10 @@ export default function Branches() {
   return (
     <div className="bg-cream min-h-screen pb-20">
       <div className="bg-ink text-cream py-16 text-center">
-        <h1 className="text-5xl font-serif font-bold mb-4 text-accent">Our Branches</h1>
+        <h1 className="text-5xl font-bold mb-4">
+          <span className="font-logo-main tracking-wide">Our</span>
+          <span className="font-logo-sub text-accent ml-3">Branches</span>
+        </h1>
         <p className="opacity-80 max-w-xl mx-auto">Find a Town Pizza-Hut near you in Swat. We are expanding to serve you better.</p>
       </div>
 

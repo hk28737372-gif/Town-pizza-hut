@@ -13,13 +13,10 @@ export default function Home() {
             filter: 'brightness(0.4)'
           }}
         />
-        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-          <h1 className="text-6xl md:text-8xl font-serif font-bold mb-4 tracking-tight drop-shadow-xl text-cream">
-            Town Pizza-Hut
-          </h1>
-          <p className="text-xl md:text-3xl font-medium mb-10 text-accent uppercase tracking-widest drop-shadow-md">
-            The Name of Quality
-          </p>
+        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto flex flex-col items-center">
+          <div className="bg-white/90 p-8 rounded-full mb-8 shadow-2xl backdrop-blur-sm border-4 border-accent">
+             <img src="https://images.gemini.googleusercontent.com/blob/AOvVaw2mR_u8D8y1pG8uE-W4RCHG_9bU5K6Z4PjNxR4Ld3BvM1T7P2Q" alt="Town Pizza Hut Logo" className="w-64 md:w-80 h-auto object-contain" />
+          </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/menu" className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-full font-bold text-lg transition-transform hover:scale-105 flex items-center justify-center gap-2">
               <ShoppingBag size={20} /> Order Now

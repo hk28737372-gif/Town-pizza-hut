@@ -7,8 +7,11 @@ export default function Contact() {
   return (
     <div className="bg-cream min-h-screen pb-20">
       <div className="bg-primary text-white py-16 text-center shadow-inner">
-        <h1 className="text-5xl font-serif font-bold mb-4 text-accent">Contact Us</h1>
-        <p className="opacity-90 max-w-xl mx-auto">We'd love to hear from you. Get in touch with us for complaints, suggestions, or events.</p>
+        <h1 className="text-5xl font-bold mb-4">
+          <span className="font-logo-main tracking-wide">Contact</span>
+          <span className="font-logo-sub text-accent ml-2">Us</span>
+        </h1>
+        <p className="opacity-90 max-w-xl mx-auto text-white">We'd love to hear from you. Get in touch with us for complaints, suggestions, or events.</p>
       </div>
 
       <div className="container mx-auto px-4 py-16 max-w-6xl">

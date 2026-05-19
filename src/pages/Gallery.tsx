@@ -25,9 +25,12 @@ export default function GalleryPage() {
 
   return (
     <div className="bg-cream min-h-screen pb-20">
-      <div className="bg-primary text-white py-16 text-center shadow-inner">
-        <h1 className="text-5xl font-serif font-bold mb-4 text-accent">Gallery</h1>
-        <p className="opacity-90 max-w-xl mx-auto">Take a glimpse into the delicious world of Town Pizza-Hut.</p>
+      <div className="bg-primary py-16 text-center shadow-inner">
+        <h1 className="text-5xl font-bold mb-4 text-white">
+          <span className="font-logo-main tracking-wide">TOWN</span>
+          <span className="font-logo-sub text-accent ml-2">Gallery</span>
+        </h1>
+        <p className="opacity-90 max-w-xl mx-auto text-white">Take a glimpse into the delicious world of Town Pizza-Hut.</p>
       </div>
 
       <div className="container mx-auto px-4 py-12">

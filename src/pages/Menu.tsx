@@ -44,9 +44,12 @@ export default function Menu() {
   return (
     <div className="bg-cream min-h-screen pb-20">
       {/* Menu Header */}
-      <div className="bg-primary text-cream py-16 text-center shadow-inner">
-        <h1 className="text-5xl font-serif font-bold mb-4 text-accent">Our Menu</h1>
-        <p className="opacity-90 max-w-2xl mx-auto">Explore our wide variety of fast food. Each dish is prepared with fresh ingredients and our special town recipes.</p>
+      <div className="bg-primary py-16 text-center shadow-inner">
+        <h1 className="text-5xl font-bold mb-4 text-white">
+          <span className="font-logo-main tracking-wide">TOWN</span>
+          <span className="font-logo-sub text-accent ml-2">Menu</span>
+        </h1>
+        <p className="opacity-90 max-w-2xl mx-auto text-white">Explore our wide variety of fast food. Each dish is prepared with fresh ingredients and our special town recipes.</p>
       </div>
 
       <div className="container mx-auto px-4 py-12">
@@ -103,8 +106,9 @@ function ProductCard({ product, onAdd }: { product: any, onAdd: () => void }) {
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400 font-serif italic border border-gray-200">
-            Town Pizza-Hut
+          <div className="w-full h-full flex flex-col items-center justify-center text-gray-300 border border-gray-200">
+            <span className="font-logo-main text-2xl tracking-wide opacity-50">TOWN</span>
+            <span className="font-logo-sub text-xl opacity-50 -mt-2">Pizza-Hut</span>
           </div>
         )}
       </div>

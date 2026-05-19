@@ -2,7 +2,10 @@ export default function About() {
   return (
     <div className="bg-cream min-h-screen pb-20">
       <div className="bg-ink text-white py-16 text-center shadow-inner">
-        <h1 className="text-5xl font-serif font-bold mb-4 text-accent">About Us</h1>
+        <h1 className="text-5xl font-bold mb-4">
+          <span className="font-logo-main tracking-wide">About</span>
+          <span className="font-logo-sub text-accent ml-2">Us</span>
+        </h1>
         <p className="opacity-80 max-w-xl mx-auto">The Name of Quality - Discover the story behind Town Pizza-Hut.</p>
       </div>
 

@@ -6,13 +6,11 @@ import { ArrowLeft, Trash2, Minus, Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Checkout() {
-  const { items, total, addItem, removeItem, updateQuantity } = useCartStore(state => ({
-    items: state.items,
-    total: state.getTotal(),
-    addItem: state.addItem,
-    removeItem: state.removeItem,
-    updateQuantity: state.updateQuantity
-  }));
+  const items = useCartStore(state => state.items);
+  const total = useCartStore(state => state.getTotal());
+  const addItem = useCartStore(state => state.addItem);
+  const removeItem = useCartStore(state => state.removeItem);
+  const updateQuantity = useCartStore(state => state.updateQuantity);
 
   const [branches, setBranches] = useState<any[]>([]);
   const [formData, setFormData] = useState({
@@ -103,7 +101,10 @@ export default function Checkout() {
         <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
           <span className="text-4xl">🛒</span>
         </div>
-        <h2 className="text-3xl font-serif font-bold text-primary mb-4">Your Cart is Empty</h2>
+        <h2 className="text-3xl font-bold mb-4 flex justify-center gap-2">
+          <span className="font-logo-main tracking-wide text-primary">Your</span>
+          <span className="font-logo-sub text-accent">Cart is Empty</span>
+        </h2>
         <p className="text-gray-500 mb-8 max-w-md">Looks like you haven't added anything to your cart yet. Explore our delicious menu!</p>
         <Link to="/menu" className="bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-primary/90 transition">
           Browse Menu
